@@ -9,22 +9,13 @@ cap = cv2.VideoCapture(0)
 
 
 def draw_on_image():
-    # cv2.line(image, (int(width / 2), 0), (int(width / 2), height), (67, 160, 46), 2)
-    #
-    # cv2.line(image, (int(width / 2) - 80, 0), (int(width / 2) - 80, height), (226, 165, 127), 1)
-    # cv2.line(image, (int(width / 2) + 80, 0), (int(width / 2) + 80, height), (226, 165, 127), 1)
-    #
-    # cv2.line(image, (0, int(height / 2)), (width, int(height / 2)), (67, 160, 46), 2)
-    #
-    # cv2.line(image, (0, int(height / 2) - 80), (width, int(height / 2) - 80), (226, 165, 127), 1)
-    # cv2.line(image, (0, int(height / 2) + 80), (width, int(height / 2) + 80), (226, 165, 127), 1)
-
     cv2.circle(image, mid_point, 4, (0, 0, 255), cv2.FILLED)
     cv2.rectangle(image, bounding_boxes[0], bounding_boxes[1], (255, 255, 0), 3)
 
 
 def slide_window():
     pass
+
 
 with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence=0.5) as face_detection:
     while cap.isOpened():
@@ -64,16 +55,8 @@ with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence
                 mid_point = (
                     int(location['width'] / 2) + location['xmin'], int(location['height'] / 2) + location['ymin'])
 
-
-                # cv2.rectangle(image, (x, y), (x + w, y + h), (24, 89, 54), 2)
-
                 x_axis_threshold = (np.add(np.multiply(w, 0.8), x), (np.add(np.multiply(w, 0.2), x)))  # left, right
                 y_axis_threshold = (np.add(np.multiply(h, 0.3), y), (np.add(np.multiply(h, 0.7), y)))  # up, down
-
-                # cv2.circle(image, (int(x_axis_threshold[1]), y), 5, (0, 0, 0), cv2.FILLED)
-                # cv2.circle(image, (int(x_axis_threshold[0]), y), 5, (0, 0, 0), cv2.FILLED)
-                # cv2.circle(image, (x, int(y_axis_threshold[1])), 5, (0, 0, 0), cv2.FILLED)
-                # cv2.circle(image, (x, int(y_axis_threshold[0])), 5, (0, 0, 0), cv2.FILLED)
 
                 if mid_point[0] > x_axis_threshold[0]:
                     x = int(x + mid_point[0] - x_axis_threshold[0])
@@ -97,7 +80,6 @@ with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence
             cv2.imshow('MediaPipe Face Detection', cv2.flip(crop, 1))
         except:
             continue
-
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
