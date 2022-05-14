@@ -41,6 +41,13 @@ with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
+        y = int(height * 0.2)
+        x = int(width * 0.2)
+        h = int(height * 0.6)
+        w = int(width * 0.6)
+
+        crop = image
+
         if results.detections:
             for detection in results.detections:
                 get_loc = detection.location_data.relative_bounding_box
@@ -57,10 +64,6 @@ with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence
                 mid_point = (
                     int(location['width'] / 2) + location['xmin'], int(location['height'] / 2) + location['ymin'])
 
-                y = int(height * 0.2)
-                x = int(width * 0.2)
-                h = int(height * 0.6)
-                w = int(width * 0.6)
 
                 # cv2.rectangle(image, (x, y), (x + w, y + h), (24, 89, 54), 2)
 
@@ -89,13 +92,13 @@ with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence
                     print("Slide up!")
 
                 crop = image[y:y + h, x:x + w]
-        else:
-            crop = image
 
         try:
             cv2.imshow('MediaPipe Face Detection', cv2.flip(crop, 1))
         except:
             continue
+
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
